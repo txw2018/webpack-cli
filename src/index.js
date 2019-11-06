@@ -1,1 +1,1 @@
-console.log(1223);
+document.write(22333223322333)

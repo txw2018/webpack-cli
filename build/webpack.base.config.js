@@ -27,34 +27,62 @@ module.exports = {
         }
       },
       {
-        test:/\.scss$/,
-        use:[
-          'style-loader',
-          'css-loader',
-          {
-            loader:'sass-loader',
-            options:{
-              implementation: require('dart-sass'),
-            }
-          },
-          'postcss-loader'
-        ]
-      },
-      {
-        test:/\.(png|jeg|jpeg|gif)$/,
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         use:{
           loader:'url-loader',
           options:{
             limit: 8192,
-            fallback:'file-loader'
+            fallback:{
+              loader:'file-loader',
+              options:{
+                name:'img/[name].[ext]?v=[hash:8]'
+              }
+            }
           }
         }
+      },
+      {
+        test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
+        use:[
+          {
+            loader:'url-loader',
+            options:{
+              limit:4096,
+              fallback:{
+                loader:'file-loader',
+                options:{
+                  name:'media/[name].[hash:8].[ext]'
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/i,
+        use:[
+          {
+            loader:'url-loader',
+            options:{
+              limit:4096,
+              fallback:{
+                loader:'file-loader',
+                options:{
+                  loader:'file-loader',
+                  options:{
+                    name:'fonts/[name].[hash:8].[ext]'
+                  }
+                }
+              }
+            }
+          }
+        ]
       }
     ]
   },
   plugins:[
     new HtmlWebpackPlugin({
-      template:resolve('../src/public/index.html')
+      template:resolve('../public/index.html')
     })
   ]
   
