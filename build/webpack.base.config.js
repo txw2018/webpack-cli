@@ -6,6 +6,11 @@ function resolve (dir) {
 
 module.exports = {
   entry:resolve('../src/index.js'),
+  output:{
+    path:resolve('../dist'),
+    filename:'[name].bundle.js',
+    chunkFilename:'[hash].bundle.js'
+  },
   resolve: {
     extensions: ['.vue', '.js', '.ts', '.tsx', '.scss']
   },
@@ -64,10 +69,7 @@ module.exports = {
               fallback:{
                 loader:'file-loader',
                 options:{
-                  loader:'file-loader',
-                  options:{
-                    name:'fonts/[name].[hash:8].[ext]'
-                  }
+                  name:'fonts/[name].[hash:8].[ext]'
                 }
               }
             }

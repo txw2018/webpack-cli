@@ -1,6 +1,8 @@
 "use strict"
 const path = require('path')
+
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 
 function resolve (dir) {
   return path.join(__dirname, dir)
@@ -37,8 +39,10 @@ module.exports = {
   plugins:[
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
+
     new HtmlWebpackPlugin({
       template:resolve('../public/index.html')
-    })
+    }),
+    new HardSourceWebpackPlugin()
   ]
 }
