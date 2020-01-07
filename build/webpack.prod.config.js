@@ -3,11 +3,17 @@ const path = require('path')
 function resolve (dir) {
   return path.join(__dirname, dir)
 }
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin') //清除打包文件
+const MiniCssExtractPlugin = require('mini-css-extract-plugin') //提取css
+const CopyWebpackPlugin = require('copy-webpack-plugin') //copy文件
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin') //压缩css
 module.exports = {
   mode:'production',
+  output:{
+    path:resolve('../dist'),
+    filename:'bundle.[chunkhash:8].js'
+  },
   module:{
     rules:[
       {
@@ -23,7 +29,9 @@ module.exports = {
               implementation: require('dart-sass'),
             }
           },
-          'postcss-loader'
+          {
+            loader: 'postcss-loader'
+          }
         ]
       },
     ]
@@ -39,6 +47,24 @@ module.exports = {
         from:resolve('../public'),
         to:resolve('../dist')
       }
-    ])
+    ]),
+    new OptimizeCssAssetsPlugin({
+      assetNameRegExp:/\.css$/g,
+      cssProcessor:require('cssnano')
+    }),
+    new HtmlWebpackPlugin({
+      template:resolve('../public/index.html'),
+      filename:'index.html',
+      chunks:['index'],
+      inject:true,
+      minify:{
+        html5:true,
+        collapseWhitespace:true,
+        preserveLineBreaks:false,
+        minifyJS:true,
+        minifyCSS:true,
+        removeComments:false
+      }
+    })
   ]
 }

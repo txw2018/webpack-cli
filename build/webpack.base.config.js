@@ -1,5 +1,4 @@
 "use strict"
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
 function resolve (dir) {
   return path.join(__dirname, dir)
@@ -7,10 +6,6 @@ function resolve (dir) {
 
 module.exports = {
   entry:resolve('../src/index.js'),
-  output:{
-    path:resolve('../dist'),
-    filename:'bundle.js'
-  },
   resolve: {
     extensions: ['.vue', '.js', '.ts', '.tsx', '.scss']
   },
@@ -19,8 +14,9 @@ module.exports = {
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
+        include:[resolve('src')],
         use: {
-          loader: 'babel-loader',
+          loader: 'babel-loader?cacheDirectory=true', //缓存，加快打包时间
           options: {
             presets: ['@babel/preset-env']
           }
@@ -81,9 +77,7 @@ module.exports = {
     ]
   },
   plugins:[
-    new HtmlWebpackPlugin({
-      template:resolve('../public/index.html')
-    })
+  
   ]
   
 }
